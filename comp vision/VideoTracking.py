@@ -26,14 +26,14 @@ def find_angle(x1, y1, x2, y2, x3, y3):
     return math.degrees(angle)
 
 def measure_joint_angle(landmark1, landmark2, landmark3):
-    x1, y1 = landmark1.x, landmark1.y
-    x2, y2 = landmark2.x, landmark2.y
-    x3, y3 = landmark3.x, landmark3.y
+    x1, y1 = landmark1, landmark1
+    x2, y2 = landmark2, landmark2
+    x3, y3 = landmark3, landmark3
     return find_angle(x1, y1, x2, y2, x3, y3)
 
 while cap.isOpened():
     ret, frame = cap.read()
-    
+
     if not ret:
         break
 
@@ -50,15 +50,15 @@ while cap.isOpened():
     if results.pose_landmarks:
         landmarks = results.pose_landmarks.landmark
 
-        hip = landmarks[mp_pose.PoseLandmark.LEFT_HIP]
-        knee = landmarks[mp_pose.PoseLandmark.LEFT_KNEE]
-        ankle = landmarks[mp_pose.PoseLandmark.LEFT_ANKLE]
+        hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+        knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
+        ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
         
         hip_knee_ankle_angle = measure_joint_angle(hip, knee, ankle)
 
-        shoulder = landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER]
-        elbow = landmarks[mp_pose.PoseLandmark.LEFT_ELBOW]
-        wrist = landmarks[mp_pose.PoseLandmark.LEFT_WRIST]
+        shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
+        elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
+        wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
 
         shoulder_elbow_wrist_angle = measure_joint_angle(shoulder, elbow, wrist)
 
@@ -82,61 +82,3 @@ while cap.isOpened():
 
 cap.release()
 cv2.destroyAllWindows()
-"""
-
-[]
-
-#Step 2: Defining Dance Moves (we only really need one for our demo; I just combined random stuff together to show how it would be to define moves though)
-def is_hands_up(landmarks):
-    #Check if both hands are above the shoulders.
-    left_wrist = landmarks.landmark[mp_pose.PoseLandmark.LEFT_WRIST]
-    right_wrist = landmarks.landmark[mp_pose.PoseLandmark.RIGHT_WRIST]
-    left_shoulder = landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER]
-    right_shoulder = landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER]
-
-    return left_wrist.y < left_shoulder.y and right_wrist.y < right_shoulder.y
-
-def is_squat(landmarks):
-    #Check if the knees are below the hips.
-    left_knee = landmarks.landmark[mp_pose.PoseLandmark.LEFT_KNEE]
-    right_knee = landmarks.landmark[mp_pose.PoseLandmark.RIGHT_KNEE]
-    left_hip = landmarks.landmark[mp_pose.PoseLandmark.LEFT_HIP]
-    right_hip = landmarks.landmark[mp_pose.PoseLandmark.RIGHT_HIP]
-
-    return left_knee.y > left_hip.y and right_knee.y > right_hip.y
-#Step 3: Real time Pose Recognition 
-while cap.isOpened():
-    ret, frame = cap.read()
-    if not ret:
-        break
-
-    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    results = pose.process(frame_rgb)
-    frame_bgr = cv2.cvtColor(frame_rgb, cv2.COLOR_RGB2BGR)
-
-    if results.pose_landmarks:
-        # Check for "hands up"
-        if is_hands_up(results.pose_landmarks):
-            cv2.putText(frame_bgr, "Hands Up!", (50, 50),
-                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-        
-        # Check for "squat"
-        if is_squat(results.pose_landmarks):
-            cv2.putText(frame_bgr, "Squat!", (50, 100),
-                        cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-        mp_drawing.draw_landmarks(frame_bgr, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
-
-    cv2.imshow("Pose Recognition", frame_bgr)
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-cap.release()
-cv2.destroyAllWindows()
-#Step 4: Synchronzing as Music
-import pygame
-pygame.mixer.init()
-pygame.mixer.music.load("song.mp3")
-pygame.mixer.music.play()
-"""
