@@ -26,9 +26,9 @@ def find_angle(x1, y1, x2, y2, x3, y3):
     return math.degrees(angle)
 
 def measure_joint_angle(landmark1, landmark2, landmark3):
-    x1, y1 = landmark1, landmark1
-    x2, y2 = landmark2, landmark2
-    x3, y3 = landmark3, landmark3
+    x1, y1 = landmark1[0], landmark1[1]
+    x2, y2 = landmark2[0], landmark2[1]
+    x3, y3 = landmark3[0], landmark3[1]
     return find_angle(x1, y1, x2, y2, x3, y3)
 
 while cap.isOpened():
