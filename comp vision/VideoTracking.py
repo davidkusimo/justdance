@@ -10,10 +10,15 @@ mp_drawing = mp.solutions.drawing_utils
 # Capture video (probably needs to fixed given external campera)
 cap = cv2.VideoCapture("/home/trietmar/Downloads/Rasputin.mp4")  # Replace '0' with your external camera index if needed
 
+prev_frame = None
+
 while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         break
+    if prev_frame is None:
+        prev_frame = frame
+        continue
 
     # Convert frame to RGB (required by MediaPipe)
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -33,18 +38,21 @@ while cap.isOpened():
     # Display the frame
     cv2.imshow("Pose Detection", frame_bgr)
 
+    diff = cv2.absdiff(prev_frame, frame)
+
     # Quit with 'q'
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
 cap.release()
 cv2.destroyAllWindows()
+"""
 
 []
 
 #Step 2: Defining Dance Moves (we only really need one for our demo; I just combined random stuff together to show how it would be to define moves though)
 def is_hands_up(landmarks):
-    """Check if both hands are above the shoulders."""
+    #Check if both hands are above the shoulders.
     left_wrist = landmarks.landmark[mp_pose.PoseLandmark.LEFT_WRIST]
     right_wrist = landmarks.landmark[mp_pose.PoseLandmark.RIGHT_WRIST]
     left_shoulder = landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER]
@@ -53,7 +61,7 @@ def is_hands_up(landmarks):
     return left_wrist.y < left_shoulder.y and right_wrist.y < right_shoulder.y
 
 def is_squat(landmarks):
-    """Check if the knees are below the hips."""
+    #Check if the knees are below the hips.
     left_knee = landmarks.landmark[mp_pose.PoseLandmark.LEFT_KNEE]
     right_knee = landmarks.landmark[mp_pose.PoseLandmark.RIGHT_KNEE]
     left_hip = landmarks.landmark[mp_pose.PoseLandmark.LEFT_HIP]
@@ -95,3 +103,4 @@ import pygame
 pygame.mixer.init()
 pygame.mixer.music.load("song.mp3")
 pygame.mixer.music.play()
+"""
