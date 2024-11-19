@@ -103,7 +103,7 @@ list = []
 score = 0
 
 for line in f:
-    list += [line.split()]
+    list += [line.split(',')]
 
 for i in range(1, len(list)):
     if abs(float(list[i][0]) - float(list[i-1][0])) <= 45 and abs(float(list[i][1]) - float(list[i-1][1])) <= 45:
