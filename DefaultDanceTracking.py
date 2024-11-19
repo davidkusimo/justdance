@@ -106,7 +106,7 @@ for line in f:
     list += [line.split()]
 
 for i in range(1, len(list)):
-    if abs(int(list[i][0]) - int(list[i-1][0])) <= 45 and abs(int(list[i][1]) - int(list[i-1][1])) <= 45:
+    if abs(float(list[i][0]) - float(list[i-1][0])) <= 45 and abs(float(list[i][1]) - float(list[i-1][1])) <= 45:
         score += 100
 
 print(f"Your score is {score}!")
