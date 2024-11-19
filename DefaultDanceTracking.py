@@ -13,7 +13,7 @@ mp_drawing = mp.solutions.drawing_utils
 cap = cv2.VideoCapture("C:\\Users\\aadwu\\Downloads\\default.mp4")  # Replace '0' with your external camera index if needed
 
 def find_angle(x1, y1, x2, y2, x3, y3):
-    """Calculate angle between vectors formed by three points."""
+    #Calculate angle between vectors formed by three points.
     v1 = [x2 - x1, y2 - y1]
     v2 = [x3 - x1, y3 - y1]
     
@@ -29,7 +29,7 @@ def find_angle(x1, y1, x2, y2, x3, y3):
     return math.degrees(angle)
 
 def measure_joint_angle(landmark1, landmark2, landmark3):
-    """Calculate angle between three pose landmarks."""
+    #Calculate angle between three pose landmarks.
     x1, y1 = landmark1.x, landmark1.y
     x2, y2 = landmark2.x, landmark2.y
     x3, y3 = landmark3.x, landmark3.y
@@ -96,6 +96,20 @@ while cap.isOpened():
         break
 
 process1.kill()
+
+f = open("angles.txt", "r")
+
+list = []
+score = 0
+
+for line in f:
+    list += [line.split()]
+
+for i in range(1, len(list)):
+    if abs(int(list[i][0]) - int(list[i-1][0])) <= 45 and abs(int(list[i][1]) - int(list[i-1][1])) <= 45:
+        score += 100
+
+print(f"Your score is {score}!")
 
 cap.release()
 cv2.destroyAllWindows()
