@@ -83,7 +83,7 @@ while cap.isOpened():
 
     if counter % 100 == 0:
         f = open("angles.txt", "a") #appends
-        f.write(f'{right_arm_angle}, {left_arm_angle}\n')
+        f.write(f'{right_arm_angle},{left_arm_angle}\n')
         f.close()
 
     counter += 1
